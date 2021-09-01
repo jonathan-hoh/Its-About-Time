@@ -159,23 +159,26 @@ def plotADC():
             count += 1
         return
         
-def dataCollect(chan):
-    rate = 16
-    cycles = 10000
-    tau = np.logspace(-1, 3, 50)
-    vals = np.zeros(rate*cycles)
-    count = 0
-    while (count < rate*cycles):
-        fpga.write_int('accum_snap_accum_snap_ctrl', 0)
-        fpga.write_int('accum_snap_accum_snap_ctrl', 1)
-        accum_data = np.fromstring(fpga.read('accum_snap_accum_snap_bram', 16*2**9), dtype = '>i').astype('float')
-        val = accum_data[chan]
-        vals[count] = val
-        count += 1
-    file = open('spec_data.csv', 'w')
-    writer = csv.writer(file)
-    writer.writerow(vals)
-    file.close()
+def dataCollect(chan, lines):
+	count1 = 0
+	rate = 16
+	file = open('spec_data.csv', 'w')
+	writer = csv.writer(file)
+	seconds_per_line = 1
+	cols = rate * seconds_per_line
+	tau = np.logspace(-1, 3, 50)
+	while (count1 < lines)	    
+	    vals = np.zeros(cols)
+	    count2 = 0
+	    while (count2 < cols):
+	        fpga.write_int('accum_snap_accum_snap_ctrl', 0)
+	        fpga.write_int('accum_snap_accum_snap_ctrl', 1)
+	        accum_data = np.fromstring(fpga.read('accum_snap_accum_snap_bram', 16*2**9), dtype = '>i').astype('float')
+	        val = accum_data[chan]
+	        vals[count2] = val
+	        count2 += 1
+	    writer.writerow(vals)
+	file.close()	
     
     
         
